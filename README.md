@@ -23,9 +23,9 @@ This command will do the following
 The crawler service api is hosted at port **9060**, so if you browse to,
 **http://localhost:9060/swagger/** you can see 2 apis hosted for the service.
 
- - /crawl/: This api will register the request for crawling a website and will return an identifier which can be
+ - **/crawl/**: This api will register the request for crawling a website and will return an identifier which can be
 user to fetch the contents later.
- - /crawl/content/{code}/: **code** is the identifier returned when the website was registered for scraping. User can 
+ - **/crawl/content/{code}/**: **code** is the identifier returned when the website was registered for scraping. User can 
    use this code to fetch the scraping results.
    
 
