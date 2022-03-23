@@ -25,12 +25,14 @@ ENV INSTALL_DIR=$INSTALL_DIR
 
 WORKDIR $INSTALL_DIR
 
-### Pull code
-COPY . .
+COPY requirements.txt .
 
 
 ### Install dependencies
 RUN pip install -r requirements.txt
+
+### Pull code
+COPY . .
 
 ## Port expose
 EXPOSE 8000
