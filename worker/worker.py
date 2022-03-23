@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 class Worker:
 
 	def __init__(self):
-		self.status = 'free'
+		self.scrapped_links = []
 		self.redis_conn = redis.Redis(charset="utf-8", decode_responses=True, **settings.QUEUE_CONN_PARAMS)
 		print(settings.QUEUE_CONN_PARAMS)
 
@@ -24,8 +24,33 @@ class Worker:
 		signal.signal(signal.SIGINT, self.kill)
 		signal.signal(signal.SIGTERM, self.kill)
 
+		self.queue_empty_message = "Url Queue is Empty....."
+		self.queue_empty_message_printed = False
+
 	def kill(self, *args):
 		self._kill_now = True
+		print(*self.scrapped_links, len(self.scrapped_links), sep="\n")
+
+	def crawl_url(self, url, code, WebLinkContent:object):
+		self.scrapped_links.append(url)
+		result_str = '\nLink: {0}'.format(url)
+		try:
+			response = requests.get(url, timeout=2)
+			soup = BeautifulSoup(response.content, 'html.parser')
+
+			link_content, created = WebLinkContent.objects.get_or_create(code=code, defaults=dict(
+				title=soup.title.text, url=url, content=response.content
+			))
+			if created:
+				result_str = result_str + '\t\t....Done'
+			else:
+				result_str = result_str + '\t\t....Already Scrapped'
+		except IntegrityError as e:
+			result_str = result_str + '\n{0}'.format(e)
+		except Exception as e:
+			result_str = result_str + '\n{0}'.format(e)
+
+		print(result_str)
 
 	def run(self):
 		from app.models import WebLinkContent
@@ -33,30 +58,19 @@ class Worker:
 		while not self._kill_now:
 			with transaction.atomic():
 
-				message = self.redis_conn.blpop(["crawler_queue"], 30)
+				message = self.redis_conn.lpop("crawler_queue")
 				if not message:
+					if not self.queue_empty_message_printed:
+						print("\n{0}\n".format(self.queue_empty_message))
+						self.queue_empty_message_printed = True
 					continue
 
-				link = json.loads(message[1])
+				self.queue_empty_message_printed = False
+				link = json.loads(message)
 				url, code = link['url'], link['code']
 				self.redis_conn.srem("crawler_codes", code)
 
-				result_str = '\nScrapping Link: {0}'.format(url)
-				response = requests.get(url)
-				soup = BeautifulSoup(response.content, 'html.parser')
-
-				try:
-					link_content, created = WebLinkContent.objects.get_or_create(code=code, defaults=dict(
-						title=soup.title.text, url=url, content=response.content
-					))
-					if created:
-						result_str = result_str + '\t\t....Done'
-					else:
-						result_str = result_str + '\t\t....Already Scrapped'
-				except IntegrityError as e:
-					print(e)
-
-				print(result_str)
+				self.crawl_url(url, code, WebLinkContent)
 
 
 if __name__ == '__main__':
