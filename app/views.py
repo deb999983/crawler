@@ -1,16 +1,10 @@
-import json
-
-import redis
-from django.conf import settings
 from django.http import Http404
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 
+import utils
 from app.models import WebLinkContent
 from app.serializers import LinkContentSerializer, LinkQueueSerializer
-
-
-redis_conn = redis.Redis(charset="utf-8", decode_responses=True, **settings.QUEUE_CONN_PARAMS)
 
 
 class ScheduleCrawlView(CreateAPIView):
@@ -18,12 +12,10 @@ class ScheduleCrawlView(CreateAPIView):
 	queryset = WebLinkContent.objects.all()
 
 	def perform_create(self, serializer):
-		code = serializer.validated_data['code']
-		# if redis_conn.sismember('crawler_codes', code):
-		# 	return serializer.validated_data
+		url = serializer.validated_data['url']
 
-		redis_conn.rpush("crawler_queue", json.dumps(serializer.validated_data))
-		redis_conn.sadd("crawler_codes", serializer.validated_data['code'])
+		url, code = utils.enqueue(url)
+		serializer.validated_data["code"] = code
 		return serializer.validated_data
 
 

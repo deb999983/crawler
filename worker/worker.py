@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import signal
+import time
 
 import django
 import redis
@@ -58,12 +59,12 @@ class Worker:
 
 		while not self._kill_now:
 			with transaction.atomic():
-
 				message = self.redis_conn.lpop("crawler_queue")
 				if not message:
 					if not self.queue_empty_message_printed:
 						print("\n{0}\n".format(self.queue_empty_message))
 						self.queue_empty_message_printed = True
+					time.sleep(0.5)
 					continue
 
 				self.queue_empty_message_printed = False
