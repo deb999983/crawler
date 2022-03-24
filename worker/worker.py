@@ -39,7 +39,8 @@ class Worker:
 			soup = BeautifulSoup(response.content, 'html.parser')
 
 			link_content, created = WebLinkContent.objects.get_or_create(code=code, defaults=dict(
-				title=soup.title.text, url=url, content=response.content
+				title=soup.title.text if soup.title else '',
+				url=url, content=response.content, status_code=response.status_code,
 			))
 			if created:
 				result_str = result_str + '\t\t....Done'
