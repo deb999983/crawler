@@ -16,8 +16,8 @@ def create_hash(url):
 
 def enqueue(url):
 	code = create_hash(url)
-	# if redis_conn.sismember('crawler_codes', code):
-	# 	return url, code
+	if redis_conn.sismember('crawler_codes', code):
+		return url, code
 
 	redis_conn.rpush("crawler_queue", json.dumps({"url": url, "code": code}))
 	redis_conn.sadd("crawler_codes", code)

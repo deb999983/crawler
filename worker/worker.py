@@ -32,14 +32,14 @@ class Worker:
 		self._kill_now = True
 		print(*self.scrapped_links, len(self.scrapped_links), sep="\n")
 
-	def crawl_url(self, url, code, WebLinkContent:object):
+	def crawl_url(self, url, code):
 		self.scrapped_links.append(url)
 		result_str = '\nLink: {0}'.format(url)
 		try:
 			response = requests.get(url, timeout=2)
 			soup = BeautifulSoup(response.content, 'html.parser')
 
-			link_content, created = WebLinkContent.objects.get_or_create(code=code, defaults=dict(
+			link_content, created = self.WebLinkContentModel.objects.get_or_create(code=code, defaults=dict(
 				title=soup.title.text if soup.title else '',
 				url=url, content=response.content, status_code=response.status_code,
 			))
@@ -56,6 +56,7 @@ class Worker:
 
 	def run(self):
 		from app.models import WebLinkContent
+		self.WebLinkContentModel = WebLinkContent
 
 		while not self._kill_now:
 			with transaction.atomic():
@@ -72,7 +73,7 @@ class Worker:
 				url, code = link['url'], link['code']
 				self.redis_conn.srem("crawler_codes", code)
 
-				self.crawl_url(url, code, WebLinkContent)
+				self.crawl_url(url, code)
 
 
 if __name__ == '__main__':
