@@ -19,5 +19,5 @@ from drf_spectacular.views import SpectacularSwaggerSplitView, SpectacularAPIVie
 urlpatterns = [
 	path('swagger/', SpectacularSwaggerSplitView.as_view(), name='swagger'),
 	path('schema/', SpectacularAPIView.as_view(), name='schema'),
-	path('crawl/', include('app.urls')),
+	path('crawl/', include('applications.crawler.urls')),
 ]

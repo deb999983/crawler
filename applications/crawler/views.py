@@ -2,9 +2,9 @@ from django.http import Http404
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 
-import utils
-from app.models import WebLinkContent
-from app.serializers import LinkContentSerializer, LinkQueueSerializer
+from common import utils
+from applications.crawler.models import WebLinkContent
+from applications.crawler.serializers import LinkContentSerializer, LinkQueueSerializer
 
 
 class ScheduleCrawlView(CreateAPIView):

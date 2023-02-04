@@ -7,4 +7,5 @@ mysqlclient
 requests
 bs4
 redis
+Celery
 

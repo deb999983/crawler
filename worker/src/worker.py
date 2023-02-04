@@ -55,7 +55,7 @@ class Worker:
 		print(result_str)
 
 	def run(self):
-		from app.models import WebLinkContent
+		from applications.crawler.models import WebLinkContent
 		self.WebLinkContentModel = WebLinkContent
 
 		while not self._kill_now:

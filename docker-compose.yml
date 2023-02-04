@@ -2,56 +2,59 @@ version: '3.9'
 
 services:
 
-  db:
-    image: mysql
-    container_name: db
-    command: --default-authentication-plugin=mysql_native_password
+  web_server_db:
+    image: web_server_db
+    build:
+      context: web_server/db
+    container_name: web_server_db
     restart: always
-    environment:
-      - MYSQL_ROOT_USER=$MY_DB_USER
-      - MYSQL_ROOT_PASSWORD=$MY_DB_PASSWORD
-      - MYSQL_DATABASE=$MY_DB_NAME
     ports:
-      - 3310:3306
+      - 6932:5432
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - $HOST_VOLS/db/var/lib/mysql:/var/lib/mysql
-    healthcheck:
-      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_ROOT_USER --password=$MY_DB_PASSWORD
-      timeout: 20s
-      retries: 3
+      - web_server_db:/var/lib/postgresql/data
 
   crawler_queue:
-    image: redis
+    image: crawler_queue
+    build:
+      context: crawler_queue
     container_name: crawler_queue
-    command: redis-server --include /usr/local/etc/redis/redis.conf
     restart: always
     ports:
-      - 6380:6379
+      - 6381:6379
     volumes:
-      - $HOST_VOLS/redis/redis.conf:/usr/local/etc/redis/redis.conf
-      - $HOST_VOLS/redis/data:/data
+      - ./crawler_queue/redis.conf:/usr/local/etc/redis/redis.conf
+      - crawler_queue_data:/data
 
   crawler_api:
     image: crawler_api
     build:
-      context: .
+      context: web_server
     container_name: crawler_api
     depends_on:
-      - db
+      - web_server_db
       - crawler_queue
     env_file:
-      - .env
+      - web_server/.env
     ports:
       - 9060:8000
+    volumes:
+      - ./common:/workspaces/web_server/common:rw
+      - ./applications:/workspaces/web_server/applications:rw
 
   crawler_worker:
     image: crawler_worker
     build:
-      context: .
-      dockerfile: Dockerfile.worker
+      context: worker
+      dockerfile: Dockerfile
     depends_on:
-      - db
+      - web_server_db
       - crawler_queue
     env_file:
       - worker/.env
+    volumes:
+      - ./common:/workspaces/worker/common:rw
+      - ./applications:/workspaces/worker/applications:rw
+
+volumes:
+  web_server_db:
+  crawler_queue_data:

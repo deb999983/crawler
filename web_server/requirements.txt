@@ -1,0 +1,11 @@
+django~=4.0.3
+django-rest-framework
+django-cors-headers
+markdown
+drf-spectacular
+mysqlclient
+requests
+bs4
+redis
+Celery
+gunicorn

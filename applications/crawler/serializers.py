@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.models import WebLinkContent
+from applications.crawler.models import WebLinkContent
 
 
 class LinkQueueSerializer(serializers.Serializer):

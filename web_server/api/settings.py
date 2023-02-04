@@ -34,7 +34,7 @@ INSTALLED_APPS = [
 	"corsheaders",
 	"rest_framework",
 	"drf_spectacular",
-	'app'
+	'applications.crawler'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -98,10 +98,10 @@ DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.mysql',
 		'HOST': os.environ.get('MY_DB_HOST', 'localhost'),
-		'PORT': os.environ.get('MY_DB_PORT', '3306'),
-		'NAME': os.environ.get('MY_DB_NAME', 'cp_local', ),
-		'USER': os.environ.get('MY_DB_USER', 'root'),
-		'PASSWORD': os.environ.get('MY_DB_PASSWORD', 'mindfire')
+		'PORT': os.environ.get('MY_DB_PORT', '6932'),
+		'NAME': os.environ.get('MY_DB_NAME', 'crawler_data', ),
+		'USER': os.environ.get('MY_DB_USER', 'postgres'),
+		'PASSWORD': os.environ.get('MY_DB_PASSWORD', 'postgres')
 	}
 }
 
@@ -146,5 +146,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 QUEUE_CONN_PARAMS = {
 	"host": os.environ.get("REDIS_HOST", "localhost"),
-	"port": os.environ.get("REDIS_PORT", 6380)
+	"port": os.environ.get("REDIS_PORT", 6381)
 }
