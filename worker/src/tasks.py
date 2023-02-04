@@ -5,21 +5,6 @@ from celery_conn import app
 from applications.crawler.models import WebLinkContent
 
 
-@app.task(name="worker.add")
-def add(x, y):
-    return x + y
-
-
-@app.task
-def mul(x, y):
-    return x * y
-
-
-@app.task
-def xsum(numbers):
-    return sum(numbers)
-
-
 @app.task(name="worker.crawl_url")
 def crawl_url(url, code):
     result_str = '\nLink: {0}'.format(url)
