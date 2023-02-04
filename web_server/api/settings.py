@@ -96,7 +96,7 @@ SPECTACULAR_SETTINGS = {
 
 DATABASES = {
 	'default': {
-		'ENGINE': 'django.db.backends.mysql',
+		'ENGINE': 'django.db.backends.postgresql',
 		'HOST': os.environ.get('MY_DB_HOST', 'localhost'),
 		'PORT': os.environ.get('MY_DB_PORT', '6932'),
 		'NAME': os.environ.get('MY_DB_NAME', 'crawler_data', ),

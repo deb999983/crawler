@@ -3,7 +3,8 @@ django-rest-framework
 django-cors-headers
 markdown
 drf-spectacular
-mysqlclient
+configparser
+psycopg2
 requests
 bs4
 redis

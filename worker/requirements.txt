@@ -1,5 +1,6 @@
 django~=4.0.3
-mysqlclient
+configparser
+psycopg2
 requests
 bs4
 redis
