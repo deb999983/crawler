@@ -3,7 +3,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.generics import CreateAPIView, RetrieveAPIView
 
 from common import utils
-from applications.crawler.models import WebLinkContent
+from applications.crawler.models import WebLinkContent, sender
 from applications.crawler.serializers import LinkContentSerializer, LinkQueueSerializer
 
 
@@ -14,7 +14,8 @@ class ScheduleCrawlView(CreateAPIView):
 	def perform_create(self, serializer):
 		url = serializer.validated_data['url']
 
-		url, code = utils.enqueue(url)
+		code = utils.create_hash(url)
+		sender.send_task("worker.crawl_url", (url, code,))
 		serializer.validated_data["code"] = code
 		return serializer.validated_data
 

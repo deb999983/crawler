@@ -23,6 +23,26 @@
             ],
             "django": true,
             "justMyCode": false
+        },
+        {
+            "name": "debug_worker",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/worker/src/worker.py",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}",
+                "DJANGO_SETTINGS_MODULE": "settings",
+                "MY_DB_USER": "postgres",
+                "MY_DB_PASSWORD": "postgres",
+                "MY_DB_HOST": "web_server_db",
+                "MY_DB_PORT": "5432",
+                "MY_DB_NAME": "crawler_data",
+            },
+            "args": [
+                "runserver",
+            ],
+            "django": true,
+            "justMyCode": false
         }              
     ]
 }

@@ -55,6 +55,16 @@ services:
       - ./common:/workspaces/worker/common:rw
       - ./applications:/workspaces/worker/applications:rw
 
+  crawler_worker_monitor:  
+    image: mher/flower
+    container_name: crawler_worker_monitor
+    environment:
+      - CELERY_BROKER_URL=redis://crawler_queue:6379/0
+      - FLOWER_PORT=8888
+      - FLOWER_URL_PREFIX=flower
+    ports:  
+      - 8888:8888
+
 volumes:
   web_server_db:
   crawler_queue_data:
