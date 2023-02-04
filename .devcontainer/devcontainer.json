@@ -11,11 +11,7 @@
 	"runArgs": [
 		"--network=crawler_default",
 		"--env-file=.devcontainer/.env"
-	],
-	// Set *default* container specific settings.json values on container create.
-	"settings": {
-		"terminal.integrated.defaultProfile.linux": "bash"
-	},
+	],	
 	// Open the sub-folder with the source code
 	"workspaceFolder": "/workspaces/crawler",
 	"remoteUser": "crawler_user",
@@ -24,7 +20,10 @@
 			"extensions": [
 				"ms-python.python",
 				"eamodio.gitlens"
-			]
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash" // Set *default* container specific settings.json values on container create.
+			}		
 		}
 	}
 }
