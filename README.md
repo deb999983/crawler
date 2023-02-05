@@ -1,40 +1,24 @@
-Implemented a very basic crawler service. The crawler service is composed of 4 components
+Run Services
 
-#### Components
-- **ResultDatabase**: This is a mysql database that stores the crawled url results.
-- **CrawlerQueue**: This is a queue that will hold the list of urls to be crawled.
-- **CrawlerServer**: This service is responsible for taking the url requests for crawling. This service
-just queues up the url for crawling in the **CrawlerQueue**, that will be picked by any running **CrawlerWorker**
-  for scraping.
-- **CrawlerWorker**: This component is responsible for crawling. It picks up urls from the queue and crawls them
-and then stores the results in the **ResultDatabase**.
-  
+```
+docker-compose up
+```
 
-#### Build
-To build the service and workers run command
- - ```docker-compose up --scale crawler_worker=5```
+This will start the following services,
+```
+[+] Running 5/5
+ ⠿ Container crawler_queue             Started                                                                                                          0.6s
+ ⠿ Container web_server_db             Started                                                                                                          0.7s
+ ⠿ Container crawler_worker_monitor    Started                                                                                                          0.6s
+ ⠿ Container crawler-crawler_worker-1  Started                                                                                                          1.3s
+ ⠿ Container crawler_api               Started                                                                                                          1.1s
+```
 
-This command will do the following
- - Start the **result_db**
- - Start up the **crawler_queue**
- - Start up the **crawler_server**
- - Start up 5 instances of **crawler_worker**
+#### API 
+`http://localhost:9060/swagger/#/crawl/crawl_create`
 
-The crawler service api is hosted at port **9060**, so if you browse to,
-**http://localhost:9060/swagger/** you can see 2 apis hosted for the service.
+#### Flower Dashboard
+http://localhost:8888/flower/tasks
 
- - **/crawl/**: This api will register the request for crawling a website and will return an identifier which can be
-user to fetch the contents later.
- - **/crawl/content/{code}/**: **code** is the identifier returned when the website was registered for scraping. User can 
-   use this code to fetch the scraping results.
-   
 
-#### Testing
-To test the service I have written a simple script that crawls a particular wiki page.
-
-Run the command
-- ```python test_api.py```,
-after starting up all the services, you can then see the results getting populated in the
-database.
-  
-Or you can anyways play with the apis.
+You can try the api using swagger and visit flower to see the state of the tasks.
