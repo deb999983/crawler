@@ -26,3 +26,4 @@ def crawl_url(url, code):
         result_str = result_str + '\n{0}'.format(e)
 
     print(result_str)
+    return result_str
