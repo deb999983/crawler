@@ -8,4 +8,4 @@ done
 echo "DB Ready ..."
 
 echo "Starting worker..."
-celery -A celery_conn:app worker -l INFO
+celery -A config.celery_conn:app worker -l INFO

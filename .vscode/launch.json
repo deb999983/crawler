@@ -31,7 +31,7 @@
             "program": "/home/crawler_user/.local/bin/celery",
             "env": {
                 "PYTHONPATH": "/workspaces/crawler/:/workspaces/crawler/worker/src",
-                "DJANGO_SETTINGS_MODULE": "settings",
+                "DJANGO_SETTINGS_MODULE": "config.settings",
                 "MY_DB_USER": "postgres",
                 "MY_DB_PASSWORD": "postgres",
                 "MY_DB_HOST": "crawler_db",
@@ -42,7 +42,7 @@
             "cwd": "${workspaceFolder}/worker/src",
             "args": [
                 "-A",
-                "celery_conn:app",
+                "config.celery_conn:app",
                 "worker",
                 "-l",
                 "info",

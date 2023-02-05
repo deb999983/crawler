@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from django.db import IntegrityError
 import requests
-from celery_conn import app
+from config.celery_conn import app
 from applications.crawler.models import WebLinkContent
 
 
