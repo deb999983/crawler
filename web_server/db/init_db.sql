@@ -1,3 +1,5 @@
 CREATE DATABASE crawler_data;
+CREATE DATABASE celery;
 CREATE USER postgres WITH PASSWORD 'postgres';
 GRANT ALL PRIVILEGES ON DATABASE crawler_data TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE celery TO postgres;
