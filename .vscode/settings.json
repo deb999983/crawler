@@ -7,7 +7,7 @@
         "/usr/local/lib/python3.9/site-packages/",
         "/workspaces/crawler",
         "/workspaces/crawler/web_servr",
-        "/workspaces/crawler/worker",
+        "/workspaces/crawler/worker/src",
     ],
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": false,
