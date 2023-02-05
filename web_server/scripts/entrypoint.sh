@@ -6,6 +6,7 @@ while ! nc -z ${MY_DB_HOST:-wiki_store_db} ${MY_DB_PORT:-5432}; do
   sleep 0.1
 done
 echo "DB Ready ..."
+python ${INSTALL_DIR}/manage.py migrate
 
 echo "Starting Gunicorn ......."
 gunicorn -v
